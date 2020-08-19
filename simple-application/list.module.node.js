@@ -27,10 +27,10 @@ router.get(                                                                     
     let stop = req.params.stop ? req.params.stop : -1;                                  // If 'stop' is passed from the URL, use it. Otherwise, default to -1.
     client.lrange(                                                                      // LRANGE: get the range of items from a list
       req.params.base,                                                                  // from the parent router
-      start,                                                                            // A start of 0 represents the begining of the list       
+      start,                                                                            // A start of 0 represents the begining of the list
       stop,                                                                             // A end of -1 represents the end of the list
       responseHelper.sc200OnRedisSuccess(res,next,{                                     // Return HTTP 200 with the results returned from Redis
-        sendResult : true 
+        sendResult : true
       })
     );
   }
@@ -39,6 +39,7 @@ router.get(                                                                     
 router.put(                                                                             // respond only to HTTP PUT
   '/:index/:value',                                                                     // ':index' enables `req.params.index`, ':value' enables `req.params.value`
   function(req,res,next) {                                                              // request, response and next middleware
+    console.log('xxxxxxxxxxxxxx')
     client.lset(                                                                        // LSET: set an value at an index in a list
       req.params.base,                                                                  // from the parent router
       req.params.index,                                                                 // from this router - the index of the item you want to update

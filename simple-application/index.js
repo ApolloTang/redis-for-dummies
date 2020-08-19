@@ -1,13 +1,13 @@
 const
   argv              = require('yargs')                                                  // 'yargs' manages command line arguments
-                      .option('connection', { 
-                        description   : 'Path to your connection object JSON file' 
+                      .option('connection', {
+                        description   : 'Path to your connection object JSON file'
                       })
                       .demandOption(['connection'])
                       .argv,
   express           = require('express'),                                               // 'express' is the HTTP server framework
   redis             = require('redis'),                                                 // 'node_redis' is the client library for redis
-  
+
   sortedHashRoutes  = require('./sorted-hash.module.node.js'),                          // these are the routes for a Hash + Zset combination
   listRoutes        = require('./list.module.node.js'),                                 // these are the routes for a list
   setRoutes         = require('./set.module.node.js'),                                  // these are the routes for a set
@@ -23,6 +23,12 @@ const
 
 function baseRoute(str) { return '/:base('+str+')'; }                                   // we'll use this syntax sugar to pass in a base route that also determine the root of the redis key
 
+client.on('error', err =>
+  console.error(
+    'RewardOps App ERR redis error: ' + err
+  )
+);
+
 sortedHashRoutes.setClient(client);                                                     // give the clients to the different routes
 listRoutes.setClient(client);
 setRoutes.setClient(client);
@@ -31,7 +37,7 @@ server.use(baseRoute(keys.descriptions),sortedHashRoutes.router);               
 server.use(baseRoute(keys.features),listRoutes.router);
 server.use(baseRoute(keys.cars),setRoutes.router);
 
-server.listen(3000,function() {                                                         // start the server at port 3000
+server.listen(3030,function() {                                                         // start the server at port 3000
   console.log('CRUD App Running.');                                                     // notify the console that we're up and ready
 });
 
